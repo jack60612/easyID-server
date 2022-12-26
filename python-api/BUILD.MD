@@ -1,0 +1,1 @@
+docker build -t jack60612/pyapi:0.0.1 . # Change version
