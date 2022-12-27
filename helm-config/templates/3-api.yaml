@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: api
+  name: {{ .Values.api.name }}
+spec:
+  replicas: {{ .Values.api.replicas }}
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                    matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - api
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - env:
+            - name: API_JAVA_OPTS
+              value: '{{ .Values.api.javaOpts }}'
+            - name: POSTGRES_PASSWORD
+              value: '{{ .Values.postgres.db_password }}'
+            - name: POSTGRES_URL
+              value: 'jdbc:postgresql://{{ .Values.postgres.name }}:{{ .Values.postgres.db_port }}/{{ .Values.postgres.db_name }}'
+            - name: POSTGRES_USER
+              value: '{{ .Values.postgres.db_user }}'
+            - name: SAVE_IMAGES_TO_DB
+              value: 'true'
+            - name: SPRING_PROFILES_ACTIVE
+              value: 'dev'
+            - name: MAX_FILE_SIZE
+              value: {{.Values.global.max_file_size}}
+            - name: MAX_REQUEST_SIZE
+              value: {{.Values.global.max_request_size}}B
+            - name: CONNECTION_TIMEOUT
+              value: '{{.Values.global.connection_timeout}}'
+            - name: READ_TIMEOUT
+              value: '{{.Values.global.read_timeout}}'
+          image: '{{ .Values.global.registry }}{{ .Values.api.repository }}:{{ .Values.api.tag }}'
+          ports:
+          - containerPort: 8080
+          name: {{ .Values.api.name }}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.api.name }}
+spec:
+  type: ClusterIP
+  selector:
+      app: api
+  ports:
+  - port: {{ .Values.admin.port }}
+    targetPort: 8080

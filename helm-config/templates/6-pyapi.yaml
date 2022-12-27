@@ -1,0 +1,62 @@
+# py-api Deployment
+# Defines the deployment of the app running in a pod on any worker node
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: py-api
+  name: {{ .Values.pyapi.name}}
+spec:
+  replicas: {{ .Values.pyapi.replicas }}
+  selector:
+    matchLabels:
+      app: py-api
+  template:
+    metadata:
+      labels:
+        app: py-api
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - py-api
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - env:
+            - name: POSTGRES_PASSWORD
+              value: '{{ .Values.postgres.db_password }}'
+            - name: POSTGRES_URL
+              value: 'jdbc:postgresql://{{ .Values.postgres.name }}:{{ .Values.postgres.db_port }}/{{ .Values.pyapi.python_db_name }}'
+            - name: POSTGRES_USER
+              value: '{{ .Values.postgres.db_user }}'
+            - name: CONNECTION_TIMEOUT
+              value: '{{.Values.global.connection_timeout}}'
+            - name: READ_TIMEOUT
+              value: '{{.Values.global.read_timeout}}'
+          image: '{{ .Values.pyapi.repository}}:{{ .Values.pyapi.tag }}'
+          name: {{ .Values.pyapi.name}}
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: {{ .Values.pyapi.pullPolicy }}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: py-api
+  name: {{ .Values.pyapi.name}}
+spec:
+    type: ClusterIP
+    selector:
+      app: py-api
+    ports:
+      - port: {{ .Values.pyapi.port }}
+        targetPort: 8080

@@ -1,0 +1,95 @@
+# this defines a storage location that can be used
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: easyid-main-pv
+  labels:
+    app: db
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain  # Delete if you really want to delete the data.
+  storageClassName: local-storage
+  local:
+    path: {{ .Values.global.file_storage_directory }}
+  nodeAffinity: # only run on one pre-defined node.
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: easyID
+          operator: In
+          values:
+          - main-node
+---
+# this lets the pod use the storage location
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: db-data
+  name: {{ .Values.postgres.name }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local-storage
+  selector:
+    matchLabels:
+      app: db
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: db
+  name: {{ .Values.postgres.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: {{ .Values.postgres.db_name }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgres.db_password }}
+            - name: POSTGRES_USER
+              value: {{ .Values.postgres.db_user }}
+          image: '{{ .Values.global.registry }}{{ .Values.postgres.repository }}:{{ .Values.postgres.tag }}'
+          name: {{ .Values.postgres.name }}
+          ports:
+          - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: {{ .Values.postgres.name }}
+              subPath: postgres
+      restartPolicy: Always
+      volumes:
+        - name: {{ .Values.postgres.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.postgres.name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.postgres.name }}
+spec:
+  type: ClusterIP
+  selector:
+      app: db
+  ports:
+    - port: {{ .Values.postgres.db_port }}
+      targetPort: 5432

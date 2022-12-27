@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: fe
+  name: {{ .Values.fe.name }}
+spec:
+  replicas: {{ .Values.fe.replicas }}
+  selector:
+    matchLabels:
+      app: fe
+  template:
+    metadata:
+      labels:
+        app: fe
+    spec:
+      containers:
+        - env:
+            - name: CLIENT_MAX_BODY_SIZE
+              value: {{.Values.global.max_request_size}}
+            - name: PROXY_READ_TIMEOUT
+              value: '{{.Values.global.read_timeout}}ms'
+            - name: PROXY_CONNECT_TIMEOUT
+              value: '{{.Values.global.connection_timeout}}ms'
+          image: '{{ .Values.global.registry }}{{ .Values.fe.repository }}:{{ .Values.fe.tag }}'
+          name: {{ .Values.fe.name }}
+          ports:
+            - containerPort: 80
+          imagePullPolicy: {{ .Values.fe.pullPolicy }}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: fe
+  name: {{ .Values.fe.name }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.fe.port }}
+      targetPort: 80
+  selector:
+    app: fe

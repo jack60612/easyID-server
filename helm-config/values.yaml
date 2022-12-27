@@ -1,0 +1,153 @@
+# Default values for compreface-kubernetes.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+global:
+  registry: exadel/
+  max_file_size: 5MB
+  max_request_size: 10M
+  connection_timeout: 10000
+  read_timeout: 60000
+  domain_name: localhost
+  # file_storage_directory: /opt/easyID # for linux systems
+  file_storage_directory: /run/desktop/mnt/host/c/easyID  # For Windows / WSL2
+
+postgres:
+  repository: compreface-postgres-db
+  pullPolicy: Always
+  tag: 1.1.0
+  db_name: comprefacemain
+  db_port: 5432
+  db_password: cfadmin1 # TODO: change to random password
+  db_user: cfadmin
+  name: compreface-postgres-db
+
+admin: # Admin Portal
+  repository: compreface-admin
+  pullPolicy: Always
+  tag: 1.1.0
+  port: 8080
+  replicas: 1
+  javaOpts: -Xmx8g
+  emailFrom: ''
+  emailHost: ''
+  emailUsername: ''
+  emailPassword: ''
+  enableEmail: 'false'
+  name: compreface-admin
+
+api: # API for Face Recognition
+  repository: compreface-api
+  pullPolicy: Always
+  tag: 1.1.0
+  port: 8080
+  replicas: 1
+  javaOpts: -Xmx8g
+  name: compreface-api
+
+fe: # Load Balancer for API & UI
+  repository: compreface-fe
+  pullPolicy: Always
+  tag: 1.1.0
+  port: 8000
+  replicas: 1
+  name: compreface-ui
+
+core: # Core for Face Recognition, connects to API only.
+  repository: compreface-core
+  pullPolicy: Always
+  tag: 1.1.0
+  port: 3000
+  replicas: 1
+  uwsgi_processes: 2
+  uwsgi_threads: 1
+  max_detect_size: 640
+  name: compreface-core
+pyapi:
+    repository: jack60612/pyidapi
+    pullPolicy: Never
+    tag: local
+    port: 8080
+    replicas: 1
+    name: py-api
+    python_db_name: pydatamain
+mainNginx:
+  repository: jack60612/idnginx
+  pullPolicy: Never
+  tag: local
+  port: 80
+  ssl_port: 443
+  replicas: 1
+  name: main-nginx
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "compreface"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

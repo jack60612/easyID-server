@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+  name: {{ .Values.mainNginx.name }}
+spec:
+  replicas: {{ .Values.mainNginx.replicas }}
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - env:
+            - name: CLIENT_MAX_BODY_SIZE
+              value: {{.Values.global.max_request_size}}
+            - name: PROXY_READ_TIMEOUT
+              value: '{{.Values.global.read_timeout}}ms'
+            - name: PROXY_CONNECT_TIMEOUT
+              value: '{{.Values.global.connection_timeout}}ms'
+            - name: DOMAIN_NAME
+              value: {{ .Values.global.domain_name }}
+            - name: COMPREFACE_UI_NAME
+              value: {{ .Values.fe.name }}
+            - name: COMPREFACE_UI_PORT
+              value: '{{ .Values.fe.port }}'
+            - name: PY_API_NAME
+              value: {{ .Values.pyapi.name }}
+            - name: PY_API_PORT
+              value: '{{ .Values.pyapi.port }}'
+          image: '{{ .Values.mainNginx.repository }}:{{ .Values.mainNginx.tag }}'
+          name: {{ .Values.mainNginx.name }}
+          ports:
+            - containerPort: 80 # http
+            - containerPort: 443 # https
+          imagePullPolicy: {{ .Values.mainNginx.pullPolicy }}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginx
+  name: {{ .Values.mainNginx.name }}
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+    - name: http
+      port: {{ .Values.mainNginx.port }}
+      targetPort: 80
+    - name: https
+      port: {{ .Values.mainNginx.ssl_port }}
+      targetPort: 443
