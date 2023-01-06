@@ -28,6 +28,7 @@
     "last_opened_file_path": "C:/Users/jackm/GitHub/easyID",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -40,6 +41,7 @@
       <option name="presentableId" value="Default" />
       <updated>1671906608677</updated>
       <workItem from="1671906609958" duration="5000" />
+      <workItem from="1672526040613" duration="17000" />
     </task>
     <servers />
   </component>
