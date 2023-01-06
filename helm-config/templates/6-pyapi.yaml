@@ -40,12 +40,14 @@ spec:
               value: '{{.Values.global.connection_timeout}}'
             - name: READ_TIMEOUT
               value: '{{.Values.global.read_timeout}}'
-          image: '{{ .Values.pyapi.repository}}:{{ .Values.pyapi.tag }}'
+          image: '{{ .Values.global.internalRegistry}}{{ .Values.pyapi.repository}}:{{ .Values.pyapi.tag }}'
           name: {{ .Values.pyapi.name}}
           ports:
             - containerPort: 8080
           imagePullPolicy: {{ .Values.pyapi.pullPolicy }}
       restartPolicy: Always
+      imagePullSecrets:
+        - name: {{ .Values.global.ghSecret }}
 ---
 apiVersion: v1
 kind: Service

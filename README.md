@@ -6,10 +6,13 @@
 2. Optional: Connect to existing Kubernetes cluster (IF more than one machine)
 3. !!! IMPORTANT !!!: For persistent data, add a label called `easyID` with a value of `main-node` to the node you want to store the db on:
 `kubectl label nodes <node-name> easyID=main-node` You can get the name by running `kubectl get nodes`.
-3. Clone this repository
-4. Make db directory: `mkdir /opt/easyID/`
-4. Run ` helm install compreface-kubernetes ./helm-config --namespace compreface --create-namespace`
-5. [Login](https://localhost) to the admin panel and create an account + needed api keys.
+4. Clone this repository
+5. Make db directory: `mkdir /opt/easyID/`
+6. Connect to gh container registry: `docker login ghcr.io` & connect kube to gh container registry: 
+``kubectl -n compreface create secret docker-registry ghregistrycred --docker-server=ghcr.io --docker-username=jack60612
+--docker-password=<github-personal-access-token>  --docker-email=jack@jacknelson.xyz``
+7. Run ` helm install compreface-kubernetes ./helm-config --namespace compreface --create-namespace`
+8. [Login](https://localhost) to the admin panel and create an account + needed api keys.
 
 ## Uninstall:
 1. Run `helm delete compreface-kubernetes -n compreface`
@@ -19,7 +22,7 @@
 - [x] Fully test new proxy.
 - [x] Do more tests with multiple api's and core components.
 - [x] Make changing ports compatible with the ui proxy & the 2nd nginx instance.
-- [ ] add CI/CD
+- [x] add CI/CD
 - [ ] Finish Python API
 
 

@@ -32,13 +32,15 @@ spec:
               value: {{ .Values.pyapi.name }}
             - name: PY_API_PORT
               value: '{{ .Values.pyapi.port }}'
-          image: '{{ .Values.mainNginx.repository }}:{{ .Values.mainNginx.tag }}'
+          image: '{{ .Values.global.internalRegistry}}{{ .Values.mainNginx.repository }}:{{ .Values.mainNginx.tag }}'
           name: {{ .Values.mainNginx.name }}
           ports:
             - containerPort: 80 # http
             - containerPort: 443 # https
           imagePullPolicy: {{ .Values.mainNginx.pullPolicy }}
       restartPolicy: Always
+      imagePullSecrets:
+        - name: {{ .Values.global.ghSecret }}
 ---
 apiVersion: v1
 kind: Service

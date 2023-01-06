@@ -5,6 +5,8 @@
 replicaCount: 1
 global:
   registry: exadel/
+  internalRegistry: ghcr.io/jack60612/
+  ghSecret: ghregistrycred
   max_file_size: 5MB
   max_request_size: 10M
   connection_timeout: 10000
@@ -65,17 +67,17 @@ core: # Core for Face Recognition, connects to API only.
   max_detect_size: 640
   name: compreface-core
 pyapi:
-    repository: jack60612/easyid-api
+    repository: easyid-api
     pullPolicy: Always
-    tag: latest
+    tag: main
     port: 8080
     replicas: 1
     name: py-api
     python_db_name: pydatamain
 mainNginx:
-  repository: jack60612/easyid-nginx
+  repository: easyid-nginx
   pullPolicy: Always
-  tag: latest
+  tag: main
   port: 80
   ssl_port: 443
   replicas: 1
