@@ -65,17 +65,17 @@ core: # Core for Face Recognition, connects to API only.
   max_detect_size: 640
   name: compreface-core
 pyapi:
-    repository: jack60612/pyidapi
-    pullPolicy: Never
-    tag: local
+    repository: jack60612/easyid-api
+    pullPolicy: Always
+    tag: latest
     port: 8080
     replicas: 1
     name: py-api
     python_db_name: pydatamain
 mainNginx:
-  repository: jack60612/idnginx
-  pullPolicy: Never
-  tag: local
+  repository: jack60612/easyid-nginx
+  pullPolicy: Always
+  tag: latest
   port: 80
   ssl_port: 443
   replicas: 1
