@@ -1,5 +1,5 @@
 ARG BASE_IMAGE
-FROM ${BASE_IMAGE:-python:3.8-slim}
+FROM ${BASE_IMAGE:-python:3.11-slim}
 
 RUN apt-get update && apt-get install -y build-essential cmake git wget unzip \
         curl yasm pkg-config libswscale-dev libtbb2 libtbb-dev libjpeg-dev \
@@ -37,16 +37,13 @@ RUN git clone --depth=1 -b 0.5.5 https://github.com/LLNL/zfp && \
 # End imagecodecs dependencies
 
 # clone compreface (we need only embedding-calculator)
-RUN git clone --depth=1 --shallow-submodules --recursive -b 1.1.x https://github.com/exadel-inc/CompreFace.git compreface
+RUN git clone --depth=1 --shallow-submodules --recursive https://github.com/jack60612/CompreFace.git compreface
 
 # install common python packages
 SHELL ["/bin/bash", "-c"]
 WORKDIR /app/ml
 #COPY requirements.txt .
 RUN cp /tmp/compreface/embedding-calculator/requirements.txt .
-# Ensure numpy is installed first as imagecodecs doesn't declare dependencies correctly until 2022.9.26,
-# which is not compatible with Python 3.7
-RUN pip --no-cache-dir install $(grep ^numpy requirements.txt)
 RUN pip --no-cache-dir install -r requirements.txt
 
 ARG BE_VERSION

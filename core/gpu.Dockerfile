@@ -1,7 +1,7 @@
-FROM nvidia/cuda:12.0.1-cudnn8-runtime-ubuntu20.04
+FROM tensorflow/tensorflow:2.12.0-gpu
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV CUDA=12.0
+ENV CUDA=11.8
 
 # Run install steps from python image
 RUN apt-get update && apt-get install -y --no-install-recommends \
