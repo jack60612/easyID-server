@@ -37,7 +37,7 @@ RUN git clone --depth=1 -b 0.5.5 https://github.com/LLNL/zfp && \
 # End imagecodecs dependencies
 
 # clone compreface (we need only embedding-calculator)
-RUN git clone --depth=1 --shallow-submodules --recursive -b 1.1.x https://github.com/exadel-inc/CompreFace.git
+RUN git clone --depth=1 --shallow-submodules --recursive -b 1.1.x https://github.com/exadel-inc/CompreFace.git compreface
 
 # install common python packages
 SHELL ["/bin/bash", "-c"]
