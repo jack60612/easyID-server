@@ -31,7 +31,7 @@ jobs:
       id-token: write
     env:
       # github.repository as <account>/<repo>
-      IMAGE_NAME: ${{ env.PREBUILD_NAME }}
+      IMAGE_NAME: $PREBUILD_NAME
 
     steps:
       - name: Checkout repository
