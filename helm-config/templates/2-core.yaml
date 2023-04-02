@@ -36,10 +36,13 @@ spec:
               value: '{{ .Values.core.uwsgi_threads }}'
             - name: IMG_LENGTH_LIMIT
               value: '{{ .Values.core.max_detect_size }}'
-          image: '{{ .Values.global.registry }}{{ .Values.core.repository }}:{{ .Values.core.tag }}'
+          image: '{{ .Values.global.internalRegistry }}{{ .Values.core.repository }}:{{ .Values.core.tag }}'
           ports:
           - containerPort: 3000
           name: {{ .Values.core.name }}
+          resources:
+            limits:
+              nvidia.com/gpu: 1
       restartPolicy: Always
 ---
 apiVersion: v1

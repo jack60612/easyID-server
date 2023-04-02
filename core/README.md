@@ -1,0 +1,1 @@
+[Upstream](https://github.com/exadel-inc/CompreFace/tree/master/embedding-calculator)

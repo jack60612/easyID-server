@@ -1,6 +1,6 @@
 apiVersion: v2
-name: compreface-kubernetes
-description: A Helm chart of compreface for Kubernetes
+name: easyid-kubernetes
+description: A Helm chart of easyid for Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
 #

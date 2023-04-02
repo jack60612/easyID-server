@@ -6,8 +6,6 @@ name: Build API Image
 # documentation.
 
 on:
-  schedule:
-    - cron: '28 11 * * *'
   push:
     branches: [ "main" ]
     # Publish semver tags as releases.
