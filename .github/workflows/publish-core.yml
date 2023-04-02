@@ -202,5 +202,5 @@ jobs:
             CALCULATION_PLUGIN=insightface.Calculator@arcface-r100-msfdrop75
             EXTRA_PLUGINS=insightface.LandmarksDetector,insightface.GenderDetector,insightface.AgeDetector,insightface.facemask.MaskDetector,insightface.PoseEstimator
             GPU_IDX=0
-            BASE_IMAGE=${{ env.REGISTRY }}/${{ env.PREBUILD_NAME }}:latest  
+            BASE_IMAGE=${{ env.REGISTRY }}/${{ env.PREBUILD_NAME }}:main  
 
