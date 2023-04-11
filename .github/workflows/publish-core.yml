@@ -126,7 +126,7 @@ jobs:
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image (ARCFACE-r100)
-        id: build-and-push
+        id: build-and-push-arcface
         uses: docker/build-push-action@v4
         with:
           context: ./core/
@@ -143,7 +143,7 @@ jobs:
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image (Mobilenet)
-        id: build-and-push
+        id: build-and-push-mobilenet
         uses: docker/build-push-action@v4
         with:
           context: ./core/
