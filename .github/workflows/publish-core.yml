@@ -80,7 +80,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  build-arcface-r100:
+  build-cpu:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -125,7 +125,7 @@ jobs:
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
-      - name: Build and push Docker image (CPU)
+      - name: Build and push Docker image (ARCFACE-r100)
         id: build-and-push
         uses: docker/build-push-action@v4
         with:
@@ -139,9 +139,25 @@ jobs:
             FACE_DETECTION_PLUGIN=insightface.FaceDetector@retinaface_r50_v1
             CALCULATION_PLUGIN=insightface.Calculator@arcface-r100-msfdrop75
             EXTRA_PLUGINS=insightface.LandmarksDetector,insightface.GenderDetector,insightface.AgeDetector,insightface.facemask.MaskDetector,insightface.PoseEstimator 
+      
+      # Build and push Docker image with Buildx (don't push on PR)
+      # https://github.com/docker/build-push-action
+      - name: Build and push Docker image (Mobilenet)
+        id: build-and-push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./core/
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.REGISTRY }}/${{ env.CORE_IMAGE_NAME }}:mobilenet
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            FACE_DETECTION_PLUGIN=insightface.FaceDetector@retinaface_mnet025_v1
+            CALCULATION_PLUGIN=insightface.Calculator@arcface_mobilefacenet
+            EXTRA_PLUGINS=insightface.LandmarksDetector,insightface.GenderDetector,insightface.AgeDetector,insightface.facemask.MaskDetector,insightface.PoseEstimator 
 
-
-  build-arcface-r100-gpu:
+  build-gpu:
     runs-on: ubuntu-latest
     needs: prebuild-gpu
     permissions:
@@ -187,7 +203,7 @@ jobs:
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
-      - name: Build and push Docker image (GPU)
+      - name: Build and push Docker image (ARCFACE-R100)
         id: build-and-push
         uses: docker/build-push-action@v4
         with:
@@ -202,5 +218,24 @@ jobs:
             CALCULATION_PLUGIN=insightface.Calculator@arcface-r100-msfdrop75
             EXTRA_PLUGINS=insightface.LandmarksDetector,insightface.GenderDetector,insightface.AgeDetector,insightface.facemask.MaskDetector,insightface.PoseEstimator
             GPU_IDX=0
-            BASE_IMAGE=${{ env.REGISTRY }}/${{ env.PREBUILD_NAME }}:main  
+            BASE_IMAGE=${{ env.REGISTRY }}/${{ env.PREBUILD_NAME }}:main
+      # Build and push Docker image with Buildx (don't push on PR)
+      # https://github.com/docker/build-push-action
+      - name: Build and push Docker image (Mobilenet)
+        id: build-and-push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./core/
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.REGISTRY }}/${{ env.CORE_IMAGE_NAME }}:mobilenet-gpu
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            FACE_DETECTION_PLUGIN=insightface.FaceDetector@retinaface_mnet025_v1
+            CALCULATION_PLUGIN=insightface.Calculator@arcface_mobilefacenet
+            EXTRA_PLUGINS=insightface.LandmarksDetector,insightface.GenderDetector,insightface.AgeDetector,insightface.facemask.MaskDetector,insightface.PoseEstimator
+            GPU_IDX=0
+            BASE_IMAGE=${{ env.REGISTRY }}/${{ env.PREBUILD_NAME }}:main 
+  
 
