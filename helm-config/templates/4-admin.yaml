@@ -14,6 +14,9 @@ spec:
       labels:
         app: admin
     spec:
+      serviceAccountName: {{ include "easyid-kubernetes.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - env:
             - name: ADMIN_JAVA_OPTS

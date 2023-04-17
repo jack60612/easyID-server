@@ -6,12 +6,11 @@ replicaCount: 1
 global:
   registry: exadel/
   internalRegistry: ghcr.io/jack60612/
-  ghSecret: ghregistrycred
   max_file_size: 5MB
   max_request_size: 10M
   connection_timeout: 10000
   read_timeout: 60000
-  domain_name: localhost
+  domain_name: easyid-server.local
   file_storage_directory: /opt/easyID # for linux systems
   # file_storage_directory: /run/desktop/mnt/host/c/easyID  # For Windows / WSL2
 
@@ -19,11 +18,11 @@ postgres:
   repository: compreface-postgres-db
   pullPolicy: Always
   tag: 1.1.0
-  db_name: comprefacemain
+  db_name: easyidmain
   db_port: 5432
   db_password: cfadmin1 # TODO: change to random password
   db_user: cfadmin
-  name: compreface-postgres-db
+  name: easyid-postgres-db
 
 admin: # Admin Portal
   repository: compreface-admin
@@ -59,7 +58,7 @@ fe: # Load Balancer for API & UI
 core: # Core for Face Recognition, connects to API only.
   repository: easyid-core
   pullPolicy: Always
-  tag: arcface-r100-gpu
+  tag: mobilenet-gpu
   port: 3000
   replicas: 1
   uwsgi_processes: 2
@@ -67,23 +66,24 @@ core: # Core for Face Recognition, connects to API only.
   max_detect_size: 640
   name: compreface-core
 pyapi: # python based custom api
-    repository: easyid-api
-    pullPolicy: Always
-    tag: main
-    port: 8080
-    replicas: 1
-    name: py-api
-    python_db_name: pydatamain
+  repository: easyid-api
+  pullPolicy: Always
+  tag: main
+  port: 8080
+  replicas: 1
+  name: easyid-py-api
+  python_db_name: pydatamain
 mainNginx: # sits in front of everything
   repository: easyid-nginx
   pullPolicy: Always
   tag: main
-  port: 8080
-  ssl_port: 8443
+  port: 80
+  ssl_port: 443
   replicas: 1
-  name: main-nginx
+  name: easyid-nginx
 
-imagePullSecrets: []
+imagePullSecrets: 
+ - name: ghregistrycred
 nameOverride: ""
 fullnameOverride: ""
 
@@ -91,7 +91,7 @@ serviceAccount:
   # Specifies whether a service account should be created
   create: true
   # Annotations to add to the service account
-  annotations: {}
+  annotations: {"easyid": "true"}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: "easyid"
@@ -111,23 +111,31 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 443
 
 ingress:
-  enabled: false
-  className: ""
-  annotations: {}
+  enabled: true
+  className: "nginx"
+  overrideName: "easyid-nginx"
+  annotations: 
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: chart-example.local
+    - host: easyid-server.local
       paths:
         - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+          pathType: Prefix
+          backend:
+            service:
+              name: easyid-nginx
+              port:
+                number: 443
+  tls:
+    - secretName: easyid-tls
+      hosts:
+        - easyid-server.local
+        - localhost
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

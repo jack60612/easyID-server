@@ -12,16 +12,26 @@ compreface server + api for easyID
 5. Make db directory: `mkdir /opt/easyID/`
 6. Run `kubectl create namespace easyid`
 7. Connect to gh container registry: `docker login ghcr.io` & connect kube to gh container registry:
-``` 
-kubectl -n easyid create secret docker-registry ghregistrycred --docker-server=ghcr.io --docker-username=jack60612
---docker-password=<github-personal-access-token>  --docker-email=jack@jacknelson.xyz 
-```
-8. Run `helm install easyid-kubernetes ./helm-config --namespace easyid`
-9. [Login](https://localhost) to the admin panel and create an account + needed api keys.
+
+    ```bash
+    kubectl -n easyid create secret docker-registry ghregistrycred --docker-server=ghcr.io --docker-username=jack60612 --docker-password=<github-personal-access-token> --docker-email=jack@jacknelson.xyz
+    ```
+
+8. Create a tls secret for the ingress:
+
+    ```bash
+    kubectl create secret tls easyid-tls \
+        --namespace easyid \
+        --key nginx-selfsigned.key \
+        --cert nginx-selfsigned.crt
+    ```
+
+9. Run `helm install easyid-kubernetes ./helm-config --namespace easyid`
+11. [Login](https://localhost) to the admin panel and create an account + needed api keys.
 
 ## Uninstall
 
-1. Run `helm delete easyid-kubernetes -n easyid`
+1. Run `helm delete easyid-kubernetes -n easyid --wait`
 2. Delete the namespace `kubectl delete namespace easyid`
 
 ### TODO

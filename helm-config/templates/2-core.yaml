@@ -26,6 +26,9 @@ spec:
                       values:
                         - core
                 topologyKey: kubernetes.io/hostname
+      serviceAccountName: {{ include "easyid-kubernetes.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - env:
             - name: ML_PORT
@@ -37,6 +40,7 @@ spec:
             - name: IMG_LENGTH_LIMIT
               value: '{{ .Values.core.max_detect_size }}'
           image: '{{ .Values.global.internalRegistry }}{{ .Values.core.repository }}:{{ .Values.core.tag }}'
+          imagePullPolicy: {{ .Values.core.pullPolicy }}   
           ports:
           - containerPort: 3000
           name: {{ .Values.core.name }}

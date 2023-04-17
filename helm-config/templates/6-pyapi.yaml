@@ -28,6 +28,9 @@ spec:
                       values:
                         - py-api
                 topologyKey: kubernetes.io/hostname
+      serviceAccountName: {{ include "easyid-kubernetes.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - env:
             - name: POSTGRES_PASSWORD
@@ -46,8 +49,6 @@ spec:
             - containerPort: 8080
           imagePullPolicy: {{ .Values.pyapi.pullPolicy }}
       restartPolicy: Always
-      imagePullSecrets:
-        - name: {{ .Values.global.ghSecret }}
 ---
 apiVersion: v1
 kind: Service

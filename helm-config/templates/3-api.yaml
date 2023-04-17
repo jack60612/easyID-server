@@ -26,6 +26,9 @@ spec:
                       values:
                         - api
                 topologyKey: kubernetes.io/hostname
+      serviceAccountName: {{ include "easyid-kubernetes.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - env:
             - name: API_JAVA_OPTS

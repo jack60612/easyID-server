@@ -60,6 +60,9 @@ spec:
       labels:
         app: db
     spec:
+      serviceAccountName: {{ include "easyid-kubernetes.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - env:
             - name: POSTGRES_DB
