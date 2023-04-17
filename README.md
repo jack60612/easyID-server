@@ -22,8 +22,8 @@ compreface server + api for easyID
     ```bash
     kubectl create secret tls easyid-tls \
         --namespace easyid \
-        --key nginx-selfsigned.key \
-        --cert nginx-selfsigned.crt
+        --key main-nginx/nginx-selfsigned.key \
+        --cert main-nginx/nginx-selfsigned.crt
     ```
 
 9. Run `helm install easyid-kubernetes ./helm-config --namespace easyid`
