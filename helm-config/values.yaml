@@ -6,7 +6,7 @@ replicaCount: 1
 global:
   registry: exadel/
   internalRegistry: ghcr.io/jack60612/
-  max_file_size: 5MB
+  max_file_size: 5MB  # update ingress rules if you change the values below
   max_request_size: 10M
   connection_timeout: 10000
   read_timeout: 60000
@@ -119,6 +119,9 @@ ingress:
   overrideName: "easyid-nginx"
   annotations: 
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10M"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "10000"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60000"
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
