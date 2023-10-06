@@ -39,7 +39,7 @@ spec:
               value: '{{ .Values.core.uwsgi_threads }}'
             - name: IMG_LENGTH_LIMIT
               value: '{{ .Values.core.max_detect_size }}'
-          image: '{{ .Values.global.internalRegistry }}{{ .Values.core.repository }}:{{ .Values.core.tag }}'
+          image: '{{ .Values.global.registry }}{{ .Values.core.repository }}:{{ .Values.core.tag }}'
           imagePullPolicy: {{ .Values.core.pullPolicy }}   
           ports:
           - containerPort: 3000

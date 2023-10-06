@@ -17,7 +17,7 @@ global:
 postgres:
   repository: compreface-postgres-db
   pullPolicy: Always
-  tag: 1.1.0
+  tag: 1.2.0
   db_name: easyidmain
   db_port: 5432
   db_password: cfadmin1 # TODO: change to random password
@@ -27,7 +27,7 @@ postgres:
 admin: # Admin Portal
   repository: compreface-admin
   pullPolicy: Always
-  tag: 1.1.0
+  tag: 1.2.0
   port: 8080
   replicas: 1
   javaOpts: -Xmx8g
@@ -41,7 +41,7 @@ admin: # Admin Portal
 api: # API for Face Recognition
   repository: compreface-api
   pullPolicy: Always
-  tag: 1.1.0
+  tag: 1.2.0
   port: 8080
   replicas: 1
   javaOpts: -Xmx8g
@@ -50,7 +50,7 @@ api: # API for Face Recognition
 fe: # Load Balancer for API & UI
   repository: compreface-fe
   pullPolicy: Always
-  tag: 1.1.0
+  tag: 1.2.0
   port: 8000
   replicas: 1
   name: compreface-ui
@@ -58,7 +58,7 @@ fe: # Load Balancer for API & UI
 core: # Core for Face Recognition, connects to API only.
   repository: easyid-core
   pullPolicy: Always
-  tag: arcface-r100-gpu
+  tag: 1.2.0-arcface-r100-gpu
   port: 3000
   replicas: 1
   uwsgi_processes: 1

@@ -52,7 +52,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="$PROJECT_DIR$/../easyID/venv/bin/python" />
-      <option name="SDK_NAME" value="Python 3.10 (venv)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -81,6 +80,7 @@
       <workItem from="1680450819584" duration="356000" />
       <workItem from="1680451184570" duration="706000" />
       <workItem from="1680461764274" duration="599000" />
+      <workItem from="1681226361215" duration="4000" />
     </task>
     <servers />
   </component>
