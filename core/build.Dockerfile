@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:2.12.0-gpu as GPU_step
+FROM tensorflow/tensorflow:2.12.0-gpu AS gpu_step
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV CUDA=11.8
@@ -43,7 +43,7 @@ LABEL org.opencontainers.image.description="Custom Image for GPU Builds"
 
 
 ARG BUILD_IMAGE
-FROM ${BUILD_IMAGE:-python:3.11-slim-bullseye} as build_step
+FROM ${BUILD_IMAGE:-python:3.11-slim-bullseye} AS build_step
 
 RUN apt-get update && apt-get install -y build-essential cmake git wget unzip \
         curl yasm pkg-config libswscale-dev libtbb2 libtbb-dev libjpeg-dev \

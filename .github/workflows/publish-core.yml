@@ -143,7 +143,7 @@ jobs:
           cache-to: type=gha,mode=max
           target: build_step
           build-args: |
-            BASE_IMAGE='GPU_step'
+            BASE_IMAGE=gpu_step
           
 
   build-cpu:
