@@ -19,6 +19,7 @@ env:
   # github.repository as <account>/<repo>
   PREBUILD_NAME: "jack60612/cudnn-python"
   CORE_IMAGE_NAME: "jack60612/easyid-core"
+  CPU-UBUNTUVER: "20.04"
 
 
 jobs:
@@ -141,7 +142,8 @@ jobs:
           build-args: |
             FACE_DETECTION_PLUGIN=insightface.FaceDetector@retinaface_r50_v1
             CALCULATION_PLUGIN=insightface.Calculator@arcface-r100-msfdrop75
-            EXTRA_PLUGINS=insightface.LandmarksDetector,insightface.GenderDetector,insightface.AgeDetector,insightface.facemask.MaskDetector,insightface.PoseEstimator 
+            EXTRA_PLUGINS=insightface.LandmarksDetector,insightface.GenderDetector,insightface.AgeDetector,insightface.facemask.MaskDetector,insightface.PoseEstimator
+            BASE_IMAGE=${{ env.CPU-UBUNTUVER }}
       
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -160,6 +162,7 @@ jobs:
             FACE_DETECTION_PLUGIN=insightface.FaceDetector@retinaface_mnet025_v1
             CALCULATION_PLUGIN=insightface.Calculator@arcface_mobilefacenet
             EXTRA_PLUGINS=insightface.LandmarksDetector,insightface.GenderDetector,insightface.AgeDetector,insightface.facemask.MaskDetector,insightface.PoseEstimator 
+            BASE_IMAGE=${{ env.CPU-UBUNTUVER }}
 
   build-gpu:
     runs-on: ubuntu-latest
