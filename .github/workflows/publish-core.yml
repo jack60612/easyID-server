@@ -148,6 +148,7 @@ jobs:
 
   build-cpu:
     runs-on: ubuntu-latest
+    needs: prebuild-cpu
     permissions:
       contents: read
       packages: write
