@@ -19,7 +19,7 @@ env:
   # github.repository as <account>/<repo>
   PREBUILD_NAME: "jack60612/cudnn-python"
   CORE_IMAGE_NAME: "jack60612/easyid-core"
-  CPU-UBUNTUVER: "20.04"
+  CPU-UBUNTUVER: "python:3.11-slim-bullseye"
 
 
 jobs:
