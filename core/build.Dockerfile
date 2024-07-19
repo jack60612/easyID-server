@@ -1,3 +1,4 @@
+ARG BUILD_IMAGE
 FROM tensorflow/tensorflow:2.12.0-gpu AS gpu_step
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -42,7 +43,7 @@ LABEL org.opencontainers.image.source=https://github.com/jack60612/easyID-server
 LABEL org.opencontainers.image.description="Custom Image for GPU Builds"
 
 
-ARG BUILD_IMAGE
+
 FROM ${BUILD_IMAGE:-python:3.11-slim-bullseye} AS build_step
 
 RUN apt-get update && apt-get install -y build-essential cmake git wget unzip \
