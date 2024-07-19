@@ -81,7 +81,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   build-cpu:
-    runs-on: [ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
