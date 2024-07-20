@@ -127,7 +127,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.PREBUILD_NAME }}
           flavor: |
-            prefix=pre
+            prefix=pre-
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -166,7 +166,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BASE_IMAGE= ${{ env.REGISTRY }}/${{ env.PREBUILD_NAME }}:pre-main
+            BASE_IMAGE=${{ env.REGISTRY }}/${{ env.PREBUILD_NAME }}:pre-main
           
 
   build-cpu:
