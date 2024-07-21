@@ -1,5 +1,5 @@
 ARG BASE_IMAGE
-FROM ${BASE_IMAGE:-python:3.11-slim-bullseye} AS core_step
+FROM ${BASE_IMAGE:-jack60612/easyid-pre:cpu-main} AS core_step
 
 ARG BE_VERSION
 ARG APP_VERSION_STRING
