@@ -198,7 +198,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./core/
-          platforms: linux/amd64 #,linux/arm64
+          platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/${{ env.CORE_IMAGE_NAME }}:arcface-r100
           labels: ${{ steps.meta.outputs.labels }}
@@ -217,7 +217,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./core/
-          platforms: linux/amd64 #,linux/arm64
+          platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/${{ env.CORE_IMAGE_NAME }}:mobilenet
           labels: ${{ steps.meta.outputs.labels }}
