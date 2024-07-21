@@ -121,32 +121,7 @@ jobs:
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
-      - name: Extract Docker metadata (pre-pre)
-        id: pre-meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.PREBUILD_NAME }}
-          flavor: |
-            prefix=pre
-
-      # Build and push Docker image with Buildx (don't push on PR)
-      # https://github.com/docker/build-push-action
-      - name: Build and push Docker image (gpu-pre-prebuild)
-        id: build-and-push
-        uses: docker/build-push-action@v4
-        with:
-          context: ./core/
-          file: ./core/build.Dockerfile
-          target: gpu_step
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.pre-meta.outputs.tags }}
-          labels: ${{ steps.pre-meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      #Extract metadata (tags, labels) for Docker
-      # https://github.com/docker/metadata-action
-      - name: Extract Docker metadata (pre)
+      - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -166,7 +141,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BASE_IMAGE= ${{ env.REGISTRY }}/${{ env.PREBUILD_NAME }}:pre-main
+            BASE_IMAGE=gpu_step
           
 
   build-cpu:
