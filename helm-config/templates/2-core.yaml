@@ -46,7 +46,6 @@ spec:
           name: {{ .Values.core.name }}
           resources:
             limits:
-              nvidia.com/gpu: 1
       restartPolicy: Always
 ---
 apiVersion: v1
