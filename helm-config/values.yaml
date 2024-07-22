@@ -58,7 +58,7 @@ fe: # Load Balancer for API & UI
 core: # Core for Face Recognition, connects to API only.
   repository: easyid-core
   pullPolicy: Always
-  tag: arcface-r100
+  tag: Mobilenet
   port: 3000
   replicas: 1
   uwsgi_processes: 1
