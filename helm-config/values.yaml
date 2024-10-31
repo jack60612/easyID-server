@@ -11,8 +11,8 @@ global:
   connection_timeout: 10000
   read_timeout: 60000
   domain_name: easyid-server.local
-  #file_storage_directory: /opt/easyID # for linux systems
-  file_storage_directory: /run/desktop/mnt/host/c/easyID  # For Windows / WSL2
+  file_storage_directory: /opt/easyID # for linux systems
+  #file_storage_directory: /run/desktop/mnt/host/c/easyID  # For Windows / WSL2
 
 postgres:
   repository: compreface-postgres-db

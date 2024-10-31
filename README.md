@@ -5,6 +5,12 @@ compreface server + api for easyID
 ## Installation
 
 1. Install [Docker](https://docs.docker.com/get-docker/), [Kubernetes](https://kubernetes.io/docs/tasks/tools/) (kubectl) and [Helm](https://helm.sh/docs/intro/install/) Or Install [MicroK8s](https://microk8s.io/) (Recommended)
+If Using Microk8s, enable the following addons:
+
+```bash
+microk8s enable dns hostpath-storage ingress
+```
+
 2. Optional: Connect to existing Kubernetes cluster (IF more than one machine)
 3. !!! IMPORTANT !!!: For persistent data, add a label called `easyID` with a value of `main-node` to the node you want to store the db on:
 `kubectl label nodes <node-name> easyID=main-node` You can get the name by running `kubectl get nodes`.
